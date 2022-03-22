@@ -2,11 +2,13 @@
 
 
 #include <stdio.h>
+#include <malloc.h>
 
 #include "medicament.h"
 #include "MyList.h"
 #include "service.h"
 #include "undo_tests.h"
+#include "undo.h"
 
 
 void testAll() {
@@ -71,7 +73,8 @@ void ui_filtruLitera(Farmacie* farm) {
     scanf("%s", c);
     MyList* filtered = filterLitera(farm, c);
     printAllMeds(filtered);
-    destroy(filtered, destroyMedicament);
+    free(filtered->elems);
+    free(filtered);
 }
 
 void ui_filtruStoc(Farmacie* farm) {
@@ -80,26 +83,30 @@ void ui_filtruStoc(Farmacie* farm) {
     scanf("%d", &st);
     MyList* filtered = filterStoc(farm, st);
     printAllMeds(filtered);
-    destroy(filtered, destroyMedicament);
+    free(filtered->elems);
+    free(filtered);
 }
 
 void showAll(Farmacie* farm) {
     MyList* meds = filterStoc(farm, 0);
     printAllMeds(meds);
-    destroy(meds, destroyMedicament);
+    free(meds->elems);
+    free(meds);
 }
 
 
 void ui_sortByName(Farmacie* farm) {
     MyList* meds = sortByName(farm);
     printAllMeds(meds);
-    destroy(meds, destroyMedicament);
+    free(meds->elems);
+    free(meds);
 }
 
 void ui_sortByQuantity(Farmacie* farm) {
     MyList* meds = sortByQuantity(farm);
     printAllMeds(meds);
-    destroy(meds, destroyMedicament);
+    free(meds->elems);
+    free(meds);
 }
 
 void ui_modify(Farmacie* farm) {
@@ -138,9 +145,11 @@ void ui_delete(Farmacie* farm) {
 }
 void run() {
     Farmacie* farm = createFarmacie();
+    Undo* und = create_undo();
     int ruleaza = 1;
     while (ruleaza) {
-        printf("0 Exit\n1 Add\n2 Print all\n3 Filter name\n4 Filter stock\n5 Sort by name\n6 Sort by quantity\n7 Modify\n8 Delete\nCommand:");
+        printf("0 Exit\n1 Add\n2 Print all\n3 Filter name\n4 Filter stock\n5 Sort by name\n6 Sort by quantity\n7 Modify"
+               "\n8 Delete\n9 undo\nCommand:");
         int cmd = 0;
         scanf("%d", &cmd);
         switch (cmd) {
@@ -148,6 +157,7 @@ void run() {
                 ruleaza = 0;
                 break;
             case 1:
+                save(und, farm);
                 readMedicament(farm);
                 break;
             case 2:
@@ -166,15 +176,21 @@ void run() {
                 ui_sortByQuantity(farm);
                 break;
             case 7:
+                save(und, farm);
                 ui_modify(farm);
                 break;
             case 8:
+                save(und, farm);
                 ui_delete(farm);
+                break;
+            case 9:
+                undo(und, farm);
                 break;
             default:
                 printf("Comanda invalida!\n");
         }
     }
+    destroy_undo(und);
     destroyFarmacie(farm);
 }
 

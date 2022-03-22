@@ -7,5 +7,11 @@
 
 void run_undo();
 
+void create_destroy_undo_test();
+
+void save_test();
+
+void undo_test();
+
 
 #endif //UNDOINA2_UNDO_TESTS_H

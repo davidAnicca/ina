@@ -21,7 +21,7 @@ MyList* createEmpty() {
 /*
   Distruge lista
 */
-void destroy(MyList* l, void (*destructor)(Medicament*)) {
+void destroy(MyList* l, void (*destructor)(void*)) {
     //dealoca medicamente
     for (int i = 0; i < l->lg; i++) {
         destructor(l->elems[i]);
@@ -116,7 +116,7 @@ MyList* copyList(MyList* l) {
 void testCreateList() {
     MyList* l = createEmpty();
     assert(size(l) == 0);
-    destroy(l, destroyMedicament);
+    destroy(l, (void (*)(void*))destroyMedicament);
 }
 void testIterateList() {
     MyList* l = createEmpty();
@@ -128,7 +128,7 @@ void testIterateList() {
     assert(m->cod==1);
     m = get(l, 1);
     assert(strcmp(m->nume, "paduden") == 0);
-    destroy(l, destroyMedicament);
+    destroy(l, (void (*)(void*))destroyMedicament);
 }
 
 void testCopyList() {
@@ -139,7 +139,7 @@ void testCopyList() {
     assert(size(l2) == 2);
     Medicament* m = get(l2, 0);
     assert(m->cod == 1);
-    destroy(l, destroyMedicament);
+    destroy(l, (void (*)(void*))destroyMedicament);
     free(l2->elems);
     free(l2);
 }
@@ -150,7 +150,7 @@ void testResize() {
         add(l, createMedicament(1, "nurofen", 200, 5));
     }
     assert(size(l) == 10);
-    destroy(l, destroyMedicament);
+    destroy(l, (void (*)(void*))destroyMedicament);
 }
 
 

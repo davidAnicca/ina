@@ -22,7 +22,7 @@ MyList* createEmpty();
 /*
   Distruge lista
 */
-void destroy(MyList* l, void (*destructor)(Medicament*));
+void destroy(MyList* l, void (*destructor)(void*));
 
 /*
   Returneaza un element din lista
