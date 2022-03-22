@@ -35,6 +35,7 @@ void testAll() {
     printf("find srv\n");
     testDeleteService();
     printf("delete srv\n");
+    test_concentratie();
 }
 
 void readMedicament(Farmacie* farm) {

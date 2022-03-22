@@ -32,7 +32,12 @@ int addMedicament(Farmacie* farm, int cod, char* nume, float concentratie, int c
 	medicamente unde stocul disponibil este mai mic decat o valoare data
 */
 MyList* filterStoc(Farmacie* farm, int stoc);
-
+/*
+ * filtrare dupa concentratie.
+ * toate medicamentele cu o concentratie mai mare decat cea data
+ */
+MyList* filterConcentratie(Farmacie* farm, float concentratie);
+void test_concentratie();
 /*
 	filtru
 	medicamente cu numele incepand cu o litera data

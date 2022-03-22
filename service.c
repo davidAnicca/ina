@@ -185,6 +185,24 @@ MyList* filterLitera(Farmacie* farm, char* litera) {
     return rez;
 }
 
+MyList* filterConcentratie(Farmacie* farm, float concentratie) {
+    if (concentratie == 0) {
+        return copyList(farm->allmeds);
+    }
+    MyList* rez = createEmpty();
+    for (int i = 0; i < size(farm->allmeds); i++) {
+        Medicament* m = get(farm->allmeds, i);
+
+        //strcpy_s(caract,1, (m.nume)[0]);
+        //if (strcmp(caract, litera) == 0)
+        if(m->concentratie > concentratie)
+        {
+            add(rez, m);
+        }
+    }
+    return rez;
+}
+
 /*
 MyList filterLitera(MyList* farm, char* litera) {
 	if (litera == NULL || strlen(litera) == 0) {
@@ -359,6 +377,23 @@ void testDeleteService() {
     free(filtered);
     destroyFarmacie(farm);
 
+}
+
+void test_concentratie(){
+    Farmacie* farm = createFarmacie();
+    addMedicament(farm, 1, "a", 200, 1);
+    addMedicament(farm, 2, "c", 400, 3);
+    addMedicament(farm, 3, "b", 400, 2);
+    MyList* filtered = filterConcentratie(farm, 0);
+    assert(size(filtered) == 3);
+    free(filtered->elems);
+    free(filtered);
+    MyList* filtered2 = filterConcentratie(farm, 300);
+    assert(size(filtered2) == 2);
+    free(filtered2->elems);
+    free(filtered2);
+
+    destroyFarmacie(farm);
 }
 
 
